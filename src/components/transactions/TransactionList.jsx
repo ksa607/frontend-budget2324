@@ -3,16 +3,43 @@ import Transaction from './Transaction';
 import TransactionForm from './TransactionForm';
 import { TRANSACTION_DATA } from '../../api/mock_data';
 
+function TransactionTable({ transactions }) {
+  if (transactions.length === 0) {
+    return (
+      <div className='alert alert-info'>There are no transactions yet.</div>
+    );
+  }
+
+  return (
+    <div>
+      <table className={`table table-hover table-responsive`}>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>User</th>
+            <th>Place</th>
+            <th>Amount</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {transactions.map((transaction, index) => (
+            <Transaction key={index} {...transaction} />
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export default function TransactionList() {
   const [transactions, setTransactions] = useState(TRANSACTION_DATA);
-
   const [text, setText] = useState('');
   const [search, setSearch] = useState('');
 
   const filteredTransactions = useMemo(
     () =>
       transactions.filter((t) => {
-        console.log('filtering...');
         return t.place.toLowerCase().includes(search.toLowerCase());
       }),
     [search, transactions]
@@ -38,7 +65,6 @@ export default function TransactionList() {
     <>
       <h1>Transactions</h1>
       <TransactionForm onSaveTransaction={createTransaction} />
-
       <div className='input-group mb-3 w-50'>
         <input
           type='search'
@@ -56,10 +82,9 @@ export default function TransactionList() {
           Search
         </button>
       </div>
-
-      {filteredTransactions.map((trans, index) => (
-        <Transaction {...trans} key={index} />
-      ))}
+      <div className='mt-4'>
+        <TransactionTable transactions={filteredTransactions} />
+      </div>
     </>
   );
 }
