@@ -1,8 +1,8 @@
 import { IoStarSharp } from 'react-icons/io5';
 
-const Star = ({ selected = false }) => {
+const Star = ({ index, selected = false, onSelect = (f) => f }) => {
   const handleClick = (e) => {
-    console.log('You clicked a star');
+    onSelect(index + 1);
   };
 
   return (
@@ -10,11 +10,20 @@ const Star = ({ selected = false }) => {
   );
 };
 
-export default function StarRating({ totalStars = 5, selectedStars = 0 }) {
+export default function StarRating({
+  totalStars = 5,
+  selectedStars = 0,
+  onRate,
+}) {
   return (
     <>
       {[...new Array(totalStars)].map((_, i) => (
-        <Star key={i} selected={selectedStars > i} />
+        <Star
+          key={i}
+          index={i}
+          selected={selectedStars > i}
+          onSelect={onRate}
+        />
       ))}
       <p>
         {selectedStars} of {totalStars} stars
