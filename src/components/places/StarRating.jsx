@@ -1,4 +1,6 @@
 import { IoStarSharp } from 'react-icons/io5';
+import { useContext } from 'react';
+import { ThemeContext } from '../../contexts/Theme.context';
 
 const Star = ({ index, selected = false, onSelect = (f) => f }) => {
   const handleClick = (e) => {
@@ -15,6 +17,7 @@ export default function StarRating({
   selectedStars = 0,
   onRate,
 }) {
+  const { oppositeTheme } = useContext(ThemeContext);
   return (
     <>
       {[...new Array(totalStars)].map((_, i) => (
@@ -25,7 +28,7 @@ export default function StarRating({
           onSelect={onRate}
         />
       ))}
-      <p>
+      <p className={`text-${oppositeTheme}`}>
         {selectedStars} of {totalStars} stars
       </p>
     </>
