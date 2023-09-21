@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import { PLACE_DATA } from '../../api/mock_data';
-import { useForm } from 'react-hook-form';
+import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
 const toDateInputString = (date) => {
   // ISO String without the trailing 'Z' is fine 🙄
@@ -15,6 +14,72 @@ const toDateInputString = (date) => {
   let asString = date.toISOString();
   return asString.substring(0, asString.indexOf('T'));
 };
+
+const validationRules = {
+  user: {
+    required: 'User is required',
+    minLength: { value: 2, message: 'Min length is 2' },
+  },
+  date: { required: 'Date is required' },
+  place: { required: 'Place is required' },
+  amount: {
+    valueAsNumber: true,
+    required: 'Amount is required',
+    min: { value: 1, message: 'min 1' },
+    max: { value: 5000, message: 'max 5000' },
+  },
+};
+
+function LabelInput({ label, name, type, validationRules, ...rest }) {
+  const { register, errors } = useFormContext();
+
+  const hasError = name in errors;
+
+  return (
+    <div className='mb-3'>
+      <label htmlFor={name} className='form-label'>
+        {label}
+      </label>
+      <input
+        {...register(name, validationRules)}
+        id={name}
+        type={type}
+        className='form-control'
+        {...rest}
+      />
+      {hasError ? (
+        <div className='form-text text-danger'>{errors[name].message}</div>
+      ) : null}
+    </div>
+  );
+}
+
+function PlacesSelect({ name, places }) {
+  const { register, errors } = useFormContext();
+
+  const hasError = name in errors;
+
+  return (
+    <div className='mb-3'>
+      <label htmlFor={name} className='form-label'>
+        Places
+      </label>
+      <select {...register(name)} id={name} className='form-select'>
+        <option defaultChecked value=''>
+          -- Select a place --
+        </option>
+        {places.map(({ id, name }) => (
+          <option key={id} value={name}>
+            {name}
+          </option>
+        ))}
+      </select>
+      {hasError ? (
+        <div className='form-text text-danger'>{errors[name]}</div>
+      ) : null}
+    </div>
+  );
+}
 
 export default function TransactionForm({ onSaveTransaction }) {
   const {
@@ -34,94 +99,52 @@ export default function TransactionForm({ onSaveTransaction }) {
   return (
     <>
       <h2>Add transaction</h2>
-      <form onSubmit={handleSubmit(onSubmit)} className='w-50 mb-3'>
-        <div className='mb-3'>
-          <label htmlFor='user' className='form-label'>
-            Who
-          </label>
-          <input
-            {...register('user', {
-              required: 'User is required',
-              minLength: { value: 2, message: 'Min length is 2' },
-            })}
-            defaultValue=''
-            id='user'
-            type='text'
-            className='form-control'
-            placeholder='user'
-            required
-          />
-          {errors.user && (
-            <p className='form-text text-danger'>{errors.user.message}</p>
-          )}
-        </div>
-
-        <div className='mb-3'>
-          <label htmlFor='date' className='form-label'>
-            Date
-          </label>
-          <input
-            {...register('date', { required: 'Date is required' })}
-            id='date'
-            type='date'
-            className='form-control'
-            placeholder='date'
-          />
-          {errors.date && (
-            <p className='form-text text-danger'>{errors.date.message}</p>
-          )}
-        </div>
-
-        <div className='mb-3'>
-          <label htmlFor='places' className='form-label'>
-            Place
-          </label>
-          <select
-            {...register('place', { required: 'Place is required' })}
-            id='places'
-            className='form-select'
-            required
-          >
-            <option defaultChecked value=''>
-              -- Select a place --
-            </option>
-            {PLACE_DATA.map(({ id, name }) => (
-              <option key={id} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className='mb-3'>
-          <label htmlFor='amount' className='form-label'>
-            Amount
-          </label>
-          <input
-            {...register('amount', {
-              valueAsNumber: true,
-              required: 'Amount is required',
-              min: { value: 1, message: 'min 1' },
-              max: { value: 5000, message: 'max 5000' },
-            })}
-            id='amount'
-            type='number'
-            className='form-control'
-            required
-          />
-          {errors.amount && (
-            <p className='form-text text-danger'>{errors.amount.message}</p>
-          )}
-        </div>
-
-        <div className='clearfix'>
-          <div className='btn-group float-end'>
-            <button type='submit' className='btn btn-primary'>
-              Add transaction
-            </button>
+      <FormProvider
+        handleSubmit={handleSubmit}
+        errors={errors}
+        register={register}
+      >
+        <form onSubmit={handleSubmit(onSubmit)} className='mb-5'>
+          <div className='mb-3'>
+            <LabelInput
+              label='User'
+              name='user'
+              type='user'
+              validationRules={validationRules.user}
+            />
           </div>
-        </div>
-      </form>
+
+          <div className='mb-3'>
+            <LabelInput
+              label='Date'
+              name='date'
+              type='date'
+              validationRules={validationRules.date}
+            />
+          </div>
+
+          <div className='mb-3'>
+            <PlacesSelect name='place' places={PLACE_DATA} />
+          </div>
+
+          <div className='mb-3'>
+            <LabelInput
+              label='Amount'
+              name='amount'
+              type='amount'
+              validationRules={validationRules.amount}
+            />
+          </div>
+
+          <div className='clearfix'>
+            <div className='btn-group float-end'>
+              <button type='submit' className='btn btn-primary'>
+                Add transaction
+              </button>
+            </div>
+          </div>
+        </form>
+      </FormProvider>
     </>
   );
 }
