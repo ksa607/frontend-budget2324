@@ -1,8 +1,14 @@
 import { IoStarSharp } from 'react-icons/io5';
 
-const Star = ({ selected = false }) => (
-  <IoStarSharp color={selected ? 'yellow' : 'grey'} />
-);
+const Star = ({ selected = false }) => {
+  const handleClick = (e) => {
+    console.log('You clicked a star');
+  };
+
+  return (
+    <IoStarSharp color={selected ? 'yellow' : 'grey'} onClick={handleClick} />
+  );
+};
 
 export default function StarRating({ totalStars = 5, selectedStars = 0 }) {
   return (
