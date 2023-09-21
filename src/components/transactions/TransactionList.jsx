@@ -1,9 +1,11 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useContext } from 'react';
 import Transaction from './Transaction';
 import TransactionForm from './TransactionForm';
 import { TRANSACTION_DATA } from '../../api/mock_data';
+import { ThemeContext } from '../../contexts/Theme.context';
 
 function TransactionTable({ transactions }) {
+  const { theme } = useContext(ThemeContext);
   if (transactions.length === 0) {
     return (
       <div className='alert alert-info'>There are no transactions yet.</div>
@@ -12,7 +14,7 @@ function TransactionTable({ transactions }) {
 
   return (
     <div>
-      <table className={`table table-hover table-responsive`}>
+      <table className={`table table-hover table-responsive table-${theme}`}>
         <thead>
           <tr>
             <th>Date</th>
