@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import StarRating from './StarRating';
 
 const Place = ({ id, name, rating, onRate, onDelete }) => {
@@ -21,4 +22,4 @@ const Place = ({ id, name, rating, onRate, onDelete }) => {
   );
 };
 
-export default Place;
+export default memo(Place);
