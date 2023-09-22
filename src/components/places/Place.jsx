@@ -1,16 +1,17 @@
-import { memo, useContext } from 'react';
+import { memo, useCallback } from 'react';
+import { useThemeColors } from '../../contexts/Theme.context';
 import StarRating from './StarRating';
-import { ThemeContext } from '../../contexts/Theme.context';
 
 const Place = ({ id, name, rating, onRate, onDelete }) => {
-  const { theme, oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeColors();
   const handleRate = (newRating) => {
     onRate(id, newRating);
   };
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     onDelete(id);
-  };
+  }, [id, onDelete]);
+
   return (
     <div className={`card bg-${theme} border-${oppositeTheme} mb-4`}>
       <div className='card-body'>

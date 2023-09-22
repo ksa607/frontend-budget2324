@@ -1,11 +1,14 @@
 import { IoStarSharp } from 'react-icons/io5';
-import { useContext } from 'react';
-import { ThemeContext } from '../../contexts/Theme.context';
+import { useThemeColors } from '../../contexts/Theme.context';
+import { useCallback } from 'react';
 
 const Star = ({ index, selected = false, onSelect = (f) => f }) => {
-  const handleClick = (e) => {
-    onSelect(index + 1);
-  };
+  const handleClick = useCallback(
+    (e) => {
+      onSelect(index + 1);
+    },
+    [index, onSelect]
+  );
 
   return (
     <IoStarSharp color={selected ? 'yellow' : 'grey'} onClick={handleClick} />
@@ -17,7 +20,7 @@ export default function StarRating({
   selectedStars = 0,
   onRate,
 }) {
-  const { oppositeTheme } = useContext(ThemeContext);
+  const { theme, oppositeTheme } = useThemeColors();
   return (
     <>
       {[...new Array(totalStars)].map((_, i) => (
