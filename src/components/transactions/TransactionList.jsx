@@ -3,6 +3,7 @@ import Transaction from './Transaction';
 import TransactionForm from './TransactionForm';
 import { ThemeContext } from '../../contexts/Theme.context';
 import * as transactionsApi from '../../api/transactions';
+import AsyncData from '../AsyncData';
 
 function TransactionTable({ transactions }) {
   const { theme } = useContext(ThemeContext);
@@ -38,12 +39,23 @@ export default function TransactionList() {
   const [transactions, setTransactions] = useState([]);
   const [text, setText] = useState('');
   const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTransactions = async () => {
-      const data = await transactionsApi.getAll();
-      setTransactions(data);
-    };
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await transactionsApi.getAll();
+        setTransactions(data);
+      } catch (error) {
+        console.error(error);
+        setError(error);
+      } finally {
+        setLoading(false);
+      }
+    }
 
     fetchTransactions();
   }, []);
@@ -94,7 +106,9 @@ export default function TransactionList() {
         </button>
       </div>
       <div className='mt-4'>
-        <TransactionTable transactions={filteredTransactions} />
+        <AsyncData loading={loading} error={error}>
+          {!error ? <TransactionTable transactions={filteredTransactions} /> : null}
+        </AsyncData>
       </div>
     </>
   );
