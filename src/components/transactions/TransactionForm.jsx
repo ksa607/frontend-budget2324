@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { PLACE_DATA } from '../../api/mock_data';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
@@ -89,12 +90,11 @@ export default function TransactionForm({ onSaveTransaction }) {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(JSON.stringify(data));
+  const onSubmit = useCallback((data) => {
     const { user, place, amount, date } = data;
     onSaveTransaction(user, place, parseInt(amount), date);
     reset();
-  };
+  }, [reset, onSaveTransaction]);
 
   return (
     <>

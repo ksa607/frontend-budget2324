@@ -16,7 +16,6 @@ const amountFormat = new Intl.NumberFormat('nl-BE', {
 
 export default memo(function Transaction(props) {
   const { user, date, amount, place } = props;
-  console.log('Rendering transaction...');
   return (
     <tr>
       <td>{dateFormat.format(new Date(date))}</td>

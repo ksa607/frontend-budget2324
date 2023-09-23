@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useContext } from 'react';
+import { useState, useMemo, useCallback, useContext, useEffect } from 'react';
 import Transaction from './Transaction';
 import TransactionForm from './TransactionForm';
 import { TRANSACTION_DATA } from '../../api/mock_data';
