@@ -19,8 +19,8 @@ export default memo(function Transaction(props) {
   return (
     <tr>
       <td>{dateFormat.format(new Date(date))}</td>
-      <td>{user}</td>
-      <td>{place}</td>
+      <td>{user.name}</td>
+      <td>{place.name}</td>
       <td> {amountFormat.format(amount)}</td>
       <td></td>
     </tr>

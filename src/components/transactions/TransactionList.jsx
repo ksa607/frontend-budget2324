@@ -1,8 +1,8 @@
 import { useState, useMemo, useCallback, useContext, useEffect } from 'react';
 import Transaction from './Transaction';
 import TransactionForm from './TransactionForm';
-import { TRANSACTION_DATA } from '../../api/mock_data';
 import { ThemeContext } from '../../contexts/Theme.context';
+import * as transactionsApi from '../../api/transactions';
 
 function TransactionTable({ transactions }) {
   const { theme } = useContext(ThemeContext);
@@ -25,8 +25,8 @@ function TransactionTable({ transactions }) {
           </tr>
         </thead>
         <tbody>
-          {transactions.map((transaction, index) => (
-            <Transaction key={index} {...transaction} />
+          {transactions.map((transaction) => (
+            <Transaction key={transaction.id} {...transaction} />
           ))}
         </tbody>
       </table>
@@ -35,14 +35,23 @@ function TransactionTable({ transactions }) {
 }
 
 export default function TransactionList() {
-  const [transactions, setTransactions] = useState(TRANSACTION_DATA);
+  const [transactions, setTransactions] = useState([]);
   const [text, setText] = useState('');
   const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      const data = await transactionsApi.getAll();
+      setTransactions(data);
+    };
+
+    fetchTransactions();
+  }, []);
 
   const filteredTransactions = useMemo(
     () =>
       transactions.filter((t) => {
-        return t.place.toLowerCase().includes(search.toLowerCase());
+        return t.place.name.toLowerCase().includes(search.toLowerCase());
       }),
     [search, transactions]
   );
