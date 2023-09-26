@@ -3,10 +3,11 @@ import Transaction from './Transaction';
 import TransactionForm from './TransactionForm';
 import { ThemeContext } from '../../contexts/Theme.context';
 import useSWR from 'swr';
-import { getAll } from '../../api';
+import useSWRMutation from 'swr/mutation';
+import { getAll, deleteById } from '../../api';
 import AsyncData from '../AsyncData';
 
-function TransactionTable({ transactions }) {
+function TransactionTable({ transactions, onDelete }) {
   const { theme } = useContext(ThemeContext);
   if (transactions.length === 0) {
     return (
@@ -28,7 +29,7 @@ function TransactionTable({ transactions }) {
         </thead>
         <tbody>
           {transactions.map((transaction) => (
-            <Transaction key={transaction.id} {...transaction} />
+            <Transaction key={transaction.id} onDelete={onDelete} {...transaction} />
           ))}
         </tbody>
       </table>
@@ -40,6 +41,7 @@ export default function TransactionList() {
   const [text, setText] = useState('');
   const [search, setSearch] = useState('');
   const { data: transactions = [], isLoading, error } = useSWR('transactions', getAll);
+  const { trigger: deleteTransaction, error: deleteError } = useSWRMutation('transactions', deleteById);
 
   const filteredTransactions = useMemo(
     () =>
@@ -87,8 +89,8 @@ export default function TransactionList() {
         </button>
       </div>
       <div className='mt-4'>
-        <AsyncData loading={isLoading} error={error}>
-          {!error ? <TransactionTable transactions={filteredTransactions} /> : null}
+        <AsyncData loading={isLoading} error={error || deleteError}>
+          {!error ? <TransactionTable transactions={filteredTransactions} onDelete={deleteTransaction} /> : null}
         </AsyncData>
       </div>
     </>
