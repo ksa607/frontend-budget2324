@@ -1,8 +1,9 @@
-import { useState, useMemo, useCallback, useContext, useEffect } from 'react';
+import { useState, useMemo, useCallback, useContext } from 'react';
 import Transaction from './Transaction';
 import TransactionForm from './TransactionForm';
 import { ThemeContext } from '../../contexts/Theme.context';
-import * as transactionsApi from '../../api/transactions';
+import useSWR from 'swr';
+import { getAll } from '../../api';
 import AsyncData from '../AsyncData';
 
 function TransactionTable({ transactions }) {
@@ -36,29 +37,9 @@ function TransactionTable({ transactions }) {
 }
 
 export default function TransactionList() {
-  const [transactions, setTransactions] = useState([]);
   const [text, setText] = useState('');
   const [search, setSearch] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchTransactions = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const data = await transactionsApi.getAll();
-        setTransactions(data);
-      } catch (error) {
-        console.error(error);
-        setError(error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchTransactions();
-  }, []);
+  const { data: transactions = [], isLoading, error } = useSWR('transactions', getAll);
 
   const filteredTransactions = useMemo(
     () =>
@@ -79,7 +60,7 @@ export default function TransactionList() {
         },
         ...transactions,
       ]; // newest first
-      setTransactions(newTransactions);
+      // setTransactions(newTransactions);
     },
     [transactions]
   );
@@ -106,7 +87,7 @@ export default function TransactionList() {
         </button>
       </div>
       <div className='mt-4'>
-        <AsyncData loading={loading} error={error}>
+        <AsyncData loading={isLoading} error={error}>
           {!error ? <TransactionTable transactions={filteredTransactions} /> : null}
         </AsyncData>
       </div>
