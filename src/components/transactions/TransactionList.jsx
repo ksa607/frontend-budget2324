@@ -7,7 +7,11 @@ import useSWRMutation from 'swr/mutation';
 import { getAll, deleteById } from '../../api';
 import AsyncData from '../AsyncData';
 
-function TransactionTable({ transactions, onDelete }) {
+function TransactionTable({
+  transactions,
+  onEdit,
+  onDelete
+}) {
   const { theme } = useContext(ThemeContext);
   if (transactions.length === 0) {
     return (
@@ -29,7 +33,12 @@ function TransactionTable({ transactions, onDelete }) {
         </thead>
         <tbody>
           {transactions.map((transaction) => (
-            <Transaction key={transaction.id} onDelete={onDelete} {...transaction} />
+            <Transaction
+              {...transaction}
+              key={transaction.id}
+              onDelete={onDelete}
+              onEdit={onEdit}
+            />
           ))}
         </tbody>
       </table>
@@ -40,6 +49,8 @@ function TransactionTable({ transactions, onDelete }) {
 export default function TransactionList() {
   const [text, setText] = useState('');
   const [search, setSearch] = useState('');
+  const [currentTransaction, setCurrentTransaction] = useState({});
+
   const { data: transactions = [], isLoading, error } = useSWR('transactions', getAll);
   const { trigger: deleteTransaction, error: deleteError } = useSWRMutation('transactions', deleteById);
 
@@ -51,10 +62,18 @@ export default function TransactionList() {
     [search, transactions]
   );
 
+  const setTransactionToUpdate = useCallback((id) => {
+    setCurrentTransaction(id === null ? {} : transactions.find((t) => t.id === id));
+  }, [transactions]);
+
   return (
     <>
       <h1>Transactions</h1>
-      <TransactionForm />
+      <TransactionForm
+        setTransactionToUpdate={setTransactionToUpdate}
+        currentTransaction={currentTransaction}
+      />
+
       <div className='input-group mb-3 w-50'>
         <input
           type='search'
@@ -74,7 +93,13 @@ export default function TransactionList() {
       </div>
       <div className='mt-4'>
         <AsyncData loading={isLoading} error={error || deleteError}>
-          {!error ? <TransactionTable transactions={filteredTransactions} onDelete={deleteTransaction} /> : null}
+          {!error ? (
+            <TransactionTable
+              transactions={filteredTransactions}
+              onDelete={deleteTransaction}
+              onEdit={setTransactionToUpdate}
+            />
+          ) : null}
         </AsyncData>
       </div>
     </>

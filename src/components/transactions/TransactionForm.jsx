@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import useSWRMutation from 'swr/mutation';
 import { getAll, save } from '../../api';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
@@ -85,7 +85,10 @@ function PlacesSelect({ name, places }) {
   );
 }
 
-export default function TransactionForm() {
+export default function TransactionForm({
+  currentTransaction,
+  setTransactionToUpdate,
+}) {
   const {
     data: places = [],
   } = useSWR('places', getAll);
@@ -98,6 +101,7 @@ export default function TransactionForm() {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm();
 
@@ -107,10 +111,28 @@ export default function TransactionForm() {
       userId: user,
       placeId: place,
       amount: parseInt(amount),
-      date
+      date,
+      id: currentTransaction?.id,
     });
-    reset();
+    setTransactionToUpdate(null);
   }, [reset, saveTransaction]);
+
+  useEffect(() => {
+    if (
+      // check on non-empty object
+      currentTransaction &&
+      (Object.keys(currentTransaction).length !== 0 ||
+          currentTransaction.constructor !== Object)
+    ) {
+      const dateAsString = toDateInputString(new Date(currentTransaction.date));
+      setValue("date", dateAsString);
+      setValue("user", currentTransaction.user.name);
+      setValue("place", currentTransaction.place.id);
+      setValue("amount", currentTransaction.amount);
+    } else {
+      reset();
+    }
+  }, [currentTransaction, setValue, reset]);
 
   return (
     <>
@@ -157,7 +179,9 @@ export default function TransactionForm() {
           <div className='clearfix'>
             <div className='btn-group float-end'>
               <button type='submit' className='btn btn-primary'>
-                Add transaction
+                {currentTransaction?.id
+                  ? "Save transaction"
+                  : "Add transaction"}
               </button>
             </div>
           </div>
