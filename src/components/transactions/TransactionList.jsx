@@ -51,26 +51,10 @@ export default function TransactionList() {
     [search, transactions]
   );
 
-  const createTransaction = useCallback(
-    (user, place, amount, date) => {
-      const newTransactions = [
-        {
-          user,
-          place,
-          amount,
-          date: new Date(date),
-        },
-        ...transactions,
-      ]; // newest first
-      // setTransactions(newTransactions);
-    },
-    [transactions]
-  );
-
   return (
     <>
       <h1>Transactions</h1>
-      <TransactionForm onSaveTransaction={createTransaction} />
+      <TransactionForm />
       <div className='input-group mb-3 w-50'>
         <input
           type='search'

@@ -8,8 +8,12 @@ export const getAll = async (url) => {
   } = await axios.get(`${baseUrl}/${url}`); 
 
   return data.items;
-}
+};
 
 export const deleteById = async (url, { arg: id }) => {
   await axios.delete(`${baseUrl}/${url}/${id}`);
-}
+};
+
+export const save = async (url, { arg: body }) => {
+  await axios.post(`${baseUrl}/${url}`, body);
+};

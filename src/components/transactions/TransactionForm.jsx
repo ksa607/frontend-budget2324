@@ -1,6 +1,9 @@
 import { useCallback } from 'react';
+import useSWRMutation from 'swr/mutation';
+import { save } from '../../api';
 import { PLACE_DATA } from '../../api/mock_data';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+import Error from '../Error';
 
 const toDateInputString = (date) => {
   // ISO String without the trailing 'Z' is fine 🙄
@@ -19,7 +22,7 @@ const toDateInputString = (date) => {
 const validationRules = {
   user: {
     required: 'User is required',
-    minLength: { value: 2, message: 'Min length is 2' },
+    min: { value: 1, message: 'min 1' },
   },
   date: { required: 'Date is required' },
   place: { required: 'Place is required' },
@@ -70,7 +73,7 @@ function PlacesSelect({ name, places }) {
           -- Select a place --
         </option>
         {places.map(({ id, name }) => (
-          <option key={id} value={name}>
+          <option key={id} value={id}>
             {name}
           </option>
         ))}
@@ -82,7 +85,12 @@ function PlacesSelect({ name, places }) {
   );
 }
 
-export default function TransactionForm({ onSaveTransaction }) {
+export default function TransactionForm() {
+  const {
+    trigger: saveTransaction,
+    error: saveError,
+  } = useSWRMutation('transactions', save);
+
   const {
     register,
     handleSubmit,
@@ -90,15 +98,22 @@ export default function TransactionForm({ onSaveTransaction }) {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = useCallback((data) => {
+  const onSubmit = useCallback(async (data) => {
     const { user, place, amount, date } = data;
-    onSaveTransaction(user, place, parseInt(amount), date);
+    await saveTransaction({
+      userId: user,
+      placeId: place,
+      amount: parseInt(amount),
+      date
+    });
     reset();
-  }, [reset, onSaveTransaction]);
+  }, [reset, saveTransaction]);
 
   return (
     <>
       <h2>Add transaction</h2>
+      <Error error={saveError} />
+
       <FormProvider
         handleSubmit={handleSubmit}
         errors={errors}
@@ -107,9 +122,9 @@ export default function TransactionForm({ onSaveTransaction }) {
         <form onSubmit={handleSubmit(onSubmit)} className='mb-5'>
           <div className='mb-3'>
             <LabelInput
-              label='User'
+              label='User ID'
               name='user'
-              type='user'
+              type='number'
               validationRules={validationRules.user}
             />
           </div>
