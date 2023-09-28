@@ -35,7 +35,11 @@ const validationRules = {
 };
 
 function LabelInput({ label, name, type, validationRules, ...rest }) {
-  const { register, errors } = useFormContext();
+  const {
+    register,
+    errors,
+    isSubmitting
+  } = useFormContext();
 
   const hasError = name in errors;
 
@@ -48,6 +52,7 @@ function LabelInput({ label, name, type, validationRules, ...rest }) {
         {...register(name, validationRules)}
         id={name}
         type={type}
+        disabled={isSubmitting}
         className='form-control'
         {...rest}
       />
@@ -59,7 +64,11 @@ function LabelInput({ label, name, type, validationRules, ...rest }) {
 }
 
 function PlacesSelect({ name, places }) {
-  const { register, errors } = useFormContext();
+  const {
+    register,
+    errors,
+    isSubmitting
+  } = useFormContext();
 
   const hasError = name in errors;
 
@@ -68,7 +77,7 @@ function PlacesSelect({ name, places }) {
       <label htmlFor={name} className='form-label'>
         Places
       </label>
-      <select {...register(name)} id={name} className='form-select'>
+      <select {...register(name)} id={name} className='form-select' disabled={isSubmitting}>
         <option defaultChecked value=''>
           -- Select a place --
         </option>
@@ -103,6 +112,7 @@ export default function TransactionForm({
     reset,
     setValue,
     formState: { errors },
+    isSubmitting,
   } = useForm();
 
   const onSubmit = useCallback(async (data) => {
@@ -143,6 +153,7 @@ export default function TransactionForm({
         handleSubmit={handleSubmit}
         errors={errors}
         register={register}
+        isSubmitting={isSubmitting}
       >
         <form onSubmit={handleSubmit(onSubmit)} className='mb-5'>
           <div className='mb-3'>
@@ -178,7 +189,11 @@ export default function TransactionForm({
 
           <div className='clearfix'>
             <div className='btn-group float-end'>
-              <button type='submit' className='btn btn-primary'>
+              <button
+                type='submit'
+                className='btn btn-primary'
+                disabled={isSubmitting}
+              >
                 {currentTransaction?.id
                   ? "Save transaction"
                   : "Add transaction"}
