@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
 import useSWRMutation from 'swr/mutation';
-import { save } from '../../api';
-import { PLACE_DATA } from '../../api/mock_data';
+import { getAll, save } from '../../api';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import Error from '../Error';
+import useSWR from 'swr';
 
 const toDateInputString = (date) => {
   // ISO String without the trailing 'Z' is fine 🙄
@@ -87,6 +87,9 @@ function PlacesSelect({ name, places }) {
 
 export default function TransactionForm() {
   const {
+    data: places = [],
+  } = useSWR('places', getAll);
+  const {
     trigger: saveTransaction,
     error: saveError,
   } = useSWRMutation('transactions', save);
@@ -139,7 +142,7 @@ export default function TransactionForm() {
           </div>
 
           <div className='mb-3'>
-            <PlacesSelect name='place' places={PLACE_DATA} />
+            <PlacesSelect name='place' places={places} />
           </div>
 
           <div className='mb-3'>
