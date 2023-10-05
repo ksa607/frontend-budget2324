@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from 'react';
 import useSWRMutation from 'swr/mutation';
-import { getAll, save } from '../../api';
+import { useNavigate } from 'react-router-dom';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+import { save } from '../../api';
 import Error from '../Error';
-import useSWR from 'swr';
 
 const toDateInputString = (date) => {
   // ISO String without the trailing 'Z' is fine 🙄
@@ -95,12 +95,10 @@ function PlacesSelect({ name, places }) {
 }
 
 export default function TransactionForm({
-  currentTransaction,
-  setTransactionToUpdate,
+  places,
+  transaction,
 }) {
-  const {
-    data: places = [],
-  } = useSWR('places', getAll);
+  const navigate = useNavigate();
   const {
     trigger: saveTransaction,
     error: saveError,
@@ -122,27 +120,27 @@ export default function TransactionForm({
       placeId: place,
       amount: parseInt(amount),
       date,
-      id: currentTransaction?.id,
+      id: transaction?.id,
     });
-    setTransactionToUpdate(null);
-  }, [reset, saveTransaction]);
+    navigate('/transactions');
+  }, [reset, saveTransaction, navigate]);
 
   useEffect(() => {
     if (
       // check on non-empty object
-      currentTransaction &&
-      (Object.keys(currentTransaction).length !== 0 ||
-          currentTransaction.constructor !== Object)
+      transaction &&
+      (Object.keys(transaction).length !== 0 ||
+          transaction.constructor !== Object)
     ) {
-      const dateAsString = toDateInputString(new Date(currentTransaction.date));
+      const dateAsString = toDateInputString(new Date(transaction.date));
       setValue("date", dateAsString);
-      setValue("user", currentTransaction.user.name);
-      setValue("place", currentTransaction.place.id);
-      setValue("amount", currentTransaction.amount);
+      setValue("user", transaction.user.id);
+      setValue("place", transaction.place.id);
+      setValue("amount", transaction.amount);
     } else {
       reset();
     }
-  }, [currentTransaction, setValue, reset]);
+  }, [transaction, setValue, reset]);
 
   return (
     <>
@@ -194,7 +192,7 @@ export default function TransactionForm({
                 className='btn btn-primary'
                 disabled={isSubmitting}
               >
-                {currentTransaction?.id
+                {transaction?.id
                   ? "Save transaction"
                   : "Add transaction"}
               </button>

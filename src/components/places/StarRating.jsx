@@ -1,10 +1,10 @@
+import { useCallback } from 'react';
 import { IoStarSharp } from 'react-icons/io5';
 import { useThemeColors } from '../../contexts/Theme.context';
-import { useCallback } from 'react';
 
 const Star = ({ index, selected = false, onSelect = (f) => f }) => {
   const handleClick = useCallback(
-    (e) => {
+    () => {
       onSelect(index + 1);
     },
     [index, onSelect]
@@ -20,7 +20,7 @@ export default function StarRating({
   selectedStars = 0,
   onRate,
 }) {
-  const { theme, oppositeTheme } = useThemeColors();
+  const { oppositeTheme } = useThemeColors();
   return (
     <>
       {[...new Array(totalStars)].map((_, i) => (

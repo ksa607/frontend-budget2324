@@ -22,3 +22,11 @@ export const save = async (url, { arg: body }) => {
     data: values,
   });
 };
+
+export const getById = async (url) => {
+  const {
+    data,
+  } = await axios.get(`${baseUrl}/${url}`);
+
+  return data;
+};
