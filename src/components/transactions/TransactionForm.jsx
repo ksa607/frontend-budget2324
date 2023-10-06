@@ -154,36 +154,28 @@ export default function TransactionForm({
         isSubmitting={isSubmitting}
       >
         <form onSubmit={handleSubmit(onSubmit)} className='mb-5'>
-          <div className='mb-3'>
-            <LabelInput
-              label='User ID'
-              name='user'
-              type='number'
-              validationRules={validationRules.user}
-            />
-          </div>
+          <LabelInput
+            label='User ID'
+            name='user'
+            type='number'
+            validationRules={validationRules.user}
+          />
 
-          <div className='mb-3'>
-            <LabelInput
-              label='Date'
-              name='date'
-              type='date'
-              validationRules={validationRules.date}
-            />
-          </div>
+          <LabelInput
+            label='Date'
+            name='date'
+            type='date'
+            validationRules={validationRules.date}
+          />
 
-          <div className='mb-3'>
-            <PlacesSelect name='place' places={places} />
-          </div>
+          <PlacesSelect name='place' places={places} />
 
-          <div className='mb-3'>
-            <LabelInput
-              label='Amount'
-              name='amount'
-              type='amount'
-              validationRules={validationRules.amount}
-            />
-          </div>
+          <LabelInput
+            label='Amount'
+            name='amount'
+            type='number'
+            validationRules={validationRules.amount}
+          />
 
           <div className='clearfix'>
             <div className='btn-group float-end'>

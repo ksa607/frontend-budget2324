@@ -28,10 +28,10 @@ export default memo(function Transaction({ id, user, date, amount, place, onDele
       <td>{place.name}</td>
       <td> {amountFormat.format(amount)}</td>
       <td>
-        <Link to={`/transactions/edit/${id}`} className="btn btn-primary">
+        <Link to={`/transactions/edit/${id}`} className="btn btn-light">
             <IoPencilOutline />
           </Link>
-        <button className='btn btn-primary' onClick={handleDelete}>
+        <button className='btn btn-danger' onClick={handleDelete}>
           <IoTrashOutline />
         </button>
       </td>
