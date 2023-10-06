@@ -159,6 +159,7 @@ export default function TransactionForm({
             name='user'
             type='number'
             validationRules={validationRules.user}
+            data-cy="user_input"
           />
 
           <LabelInput
@@ -166,15 +167,17 @@ export default function TransactionForm({
             name='date'
             type='date'
             validationRules={validationRules.date}
+            data-cy="date_input"
           />
 
-          <PlacesSelect name='place' places={places} />
+          <PlacesSelect name='place' places={places} data-cy="place_input" />
 
           <LabelInput
             label='Amount'
             name='amount'
             type='number'
             validationRules={validationRules.amount}
+            data-cy="amount_input"
           />
 
           <div className='clearfix'>
@@ -183,6 +186,7 @@ export default function TransactionForm({
                 type='submit'
                 className='btn btn-primary'
                 disabled={isSubmitting}
+                data-cy="submit_transaction"
               >
                 {transaction?.id
                   ? "Save transaction"

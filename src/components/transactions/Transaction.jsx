@@ -22,16 +22,20 @@ export default memo(function Transaction({ id, user, date, amount, place, onDele
   }, [id, onDelete]);
 
   return (
-    <tr>
-      <td>{dateFormat.format(new Date(date))}</td>
-      <td>{user.name}</td>
-      <td>{place.name}</td>
-      <td> {amountFormat.format(amount)}</td>
+    <tr data-cy="transaction">
+      <td data-cy="transaction_date">
+        {dateFormat.format(new Date(date))}
+      </td>
+      <td data-cy="transaction_user">{user.name}</td>
+      <td data-cy="transaction_place">{place.name}</td>
+      <td data-cy="transaction_amount">
+        {amountFormat.format(amount)}
+      </td>
       <td>
-        <Link to={`/transactions/edit/${id}`} className="btn btn-light">
+        <Link data-cy="transaction_edit_btn" to={`/transactions/edit/${id}`} className="btn btn-light">
             <IoPencilOutline />
           </Link>
-        <button className='btn btn-danger' onClick={handleDelete}>
+        <button data-cy="transaction_remove_btn" className='btn btn-danger' onClick={handleDelete}>
           <IoTrashOutline />
         </button>
       </td>
