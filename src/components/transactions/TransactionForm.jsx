@@ -63,7 +63,7 @@ function LabelInput({ label, name, type, validationRules, ...rest }) {
   );
 }
 
-function PlacesSelect({ name, places }) {
+function PlacesSelect({ name, places, ...rest }) {
   const {
     register,
     errors,
@@ -77,7 +77,7 @@ function PlacesSelect({ name, places }) {
       <label htmlFor={name} className='form-label'>
         Places
       </label>
-      <select {...register(name)} id={name} className='form-select' disabled={isSubmitting}>
+      <select {...register(name)} id={name} className='form-select' disabled={isSubmitting} {...rest}>
         <option defaultChecked value=''>
           -- Select a place --
         </option>
