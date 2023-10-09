@@ -1,0 +1,18 @@
+{
+ "items": [
+    {
+      "id":1,
+      "amount":-97,
+      "date":"2021-11-01",
+      "user": {
+        "id":2,
+        "name":"Pieter"
+      },
+      "place": {
+        "id":4,
+        "name":"Chinese Restaurant"
+      }
+    }
+  ],
+  "count":1
+}

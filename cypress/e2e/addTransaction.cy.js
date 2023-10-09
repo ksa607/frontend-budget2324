@@ -1,4 +1,5 @@
 describe('Add transaction', () => {
+
   it("should add a transaction", () => {
     cy.visit("http://localhost:5173/transactions/add");
 
