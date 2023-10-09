@@ -8,7 +8,7 @@ export default function TransactionTable({
   const { theme } = useThemeColors();
   if (transactions.length === 0) {
     return (
-      <div className='alert alert-info'>There are no transactions yet.</div>
+      <div className='alert alert-info' data-cy="no_transactions_message">There are no transactions yet.</div>
     );
   }
 

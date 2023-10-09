@@ -41,11 +41,13 @@ export default function TransactionList() {
           placeholder='Search'
           value={text}
           onChange={(e) => setText(e.target.value)}
+          data-cy="transactions_search_input"
         />
         <button
           type='button'
           className='btn btn-outline-primary'
           onClick={() => setSearch(text)}
+          data-cy="transactions_search_btn"
         >
           Search
         </button>
