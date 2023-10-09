@@ -57,7 +57,7 @@ function LabelInput({ label, name, type, validationRules, ...rest }) {
         {...rest}
       />
       {hasError ? (
-        <div className='form-text text-danger'>{errors[name].message}</div>
+        <div className='form-text text-danger' data-cy="label_input_error">{errors[name].message}</div>
       ) : null}
     </div>
   );
@@ -88,7 +88,7 @@ function PlacesSelect({ name, places, ...rest }) {
         ))}
       </select>
       {hasError ? (
-        <div className='form-text text-danger'>{errors[name]}</div>
+        <div className='form-text text-danger' data-cy="places_select_error">{errors[name]}</div>
       ) : null}
     </div>
   );

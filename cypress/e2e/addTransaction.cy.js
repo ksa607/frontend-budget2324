@@ -22,4 +22,13 @@ describe('Add transaction', () => {
     cy.get("[data-cy=transaction_remove_btn]").eq(9).click();
     cy.get("[data-cy=transaction]").should("have.length", 9);
   });
+
+  it("should show the error message for an invalid user id", () => {
+    cy.visit("http://localhost:5173/transactions/add");
+
+    cy.get("[data-cy=user_input]").type("-1");
+    cy.get("[data-cy=submit_transaction]").click();
+
+    cy.get("[data-cy=label_input_error]").contains("min 1");
+  });
 });
