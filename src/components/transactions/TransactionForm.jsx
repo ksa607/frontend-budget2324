@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import { save } from '../../api';
 import Error from '../Error';
+import LabelInput from '../LabelInput';
 
 const toDateInputString = (date) => {
   // ISO String without the trailing 'Z' is fine 🙄
@@ -34,40 +35,13 @@ const validationRules = {
   },
 };
 
-function LabelInput({ label, name, type, validationRules, ...rest }) {
-  const {
-    register,
-    errors,
-    isSubmitting
-  } = useFormContext();
-
-  const hasError = name in errors;
-
-  return (
-    <div className='mb-3'>
-      <label htmlFor={name} className='form-label'>
-        {label}
-      </label>
-      <input
-        {...register(name, validationRules)}
-        id={name}
-        type={type}
-        disabled={isSubmitting}
-        className='form-control'
-        {...rest}
-      />
-      {hasError ? (
-        <div className='form-text text-danger' data-cy="label_input_error">{errors[name].message}</div>
-      ) : null}
-    </div>
-  );
-}
-
 function PlacesSelect({ name, places, ...rest }) {
   const {
     register,
-    errors,
-    isSubmitting
+    formState: {
+      errors,
+      isSubmitting,
+    }
   } = useFormContext();
 
   const hasError = name in errors;
@@ -104,14 +78,13 @@ export default function TransactionForm({
     error: saveError,
   } = useSWRMutation('transactions', save);
 
+  const methods = useForm();
   const {
-    register,
     handleSubmit,
     reset,
     setValue,
-    formState: { errors },
     isSubmitting,
-  } = useForm();
+  } = methods;
 
   const onSubmit = useCallback(async (data) => {
     const { user, place, amount, date } = data;
@@ -147,12 +120,7 @@ export default function TransactionForm({
       <h2>Add transaction</h2>
       <Error error={saveError} />
 
-      <FormProvider
-        handleSubmit={handleSubmit}
-        errors={errors}
-        register={register}
-        isSubmitting={isSubmitting}
-      >
+      <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className='mb-5'>
           <LabelInput
             label='User ID'
