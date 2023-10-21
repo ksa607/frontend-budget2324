@@ -8,6 +8,7 @@ import TransactionList from './pages/transactions/TransactionList';
 import AddOrEditTransaction from './pages/transactions/AddOrEditTransaction';
 import PlacesList from './pages/places/PlacesList';
 import Login from './pages/Login';
+import Logout from './pages/Logout';
 import { ThemeProvider } from './contexts/Theme.context';
 import { AuthProvider } from './contexts/Auth.context';
 import './index.css';
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: '/login',
         element: <Login />,
+      },
+      {
+        path: '/logout',
+        element: <Logout />,
       },
       {
         path: '/transactions',

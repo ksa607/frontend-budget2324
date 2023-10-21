@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom';
-import { useTheme } from '../contexts/Theme.context';
 import { IoMoonSharp, IoSunny } from 'react-icons/io5';
+import { useTheme } from '../contexts/Theme.context';
+import { useAuth } from '../contexts/Auth.context';
 
 export default function Navbar() {
+  const { isAuthed } = useAuth(); 
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -15,6 +17,20 @@ export default function Navbar() {
           <Link className="nav-link" to="/places">Places</Link>
         </div>
         <div className="flex-grow-1"></div>
+
+        {
+          isAuthed
+            ? (
+              <div className="nav-item my-2 mx-sm-3 my-sm-0">
+                <Link className="nav-link" to="/logout">Logout</Link>
+              </div>
+            )
+            : (
+              <div className="nav-item my-2 mx-sm-3 my-sm-0">
+                <Link className="nav-link" to="/login">Login</Link>
+              </div>
+            )
+        }
 
         <button className="btn btn-secondary" type="button" onClick={toggleTheme}>
           {
