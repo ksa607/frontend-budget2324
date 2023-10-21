@@ -21,10 +21,6 @@ const toDateInputString = (date) => {
 };
 
 const validationRules = {
-  user: {
-    required: 'User is required',
-    min: { value: 1, message: 'min 1' },
-  },
   date: { required: 'Date is required' },
   place: { required: 'Place is required' },
   amount: {
@@ -87,9 +83,8 @@ export default function TransactionForm({
   } = methods;
 
   const onSubmit = useCallback(async (data) => {
-    const { user, place, amount, date } = data;
+    const { place, amount, date } = data;
     await saveTransaction({
-      userId: user,
       placeId: place,
       amount: parseInt(amount),
       date,
@@ -107,7 +102,6 @@ export default function TransactionForm({
     ) {
       const dateAsString = toDateInputString(new Date(transaction.date));
       setValue("date", dateAsString);
-      setValue("user", transaction.user.id);
       setValue("place", transaction.place.id);
       setValue("amount", transaction.amount);
     } else {
@@ -122,14 +116,6 @@ export default function TransactionForm({
 
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className='mb-5'>
-          <LabelInput
-            label='User ID'
-            name='user'
-            type='number'
-            validationRules={validationRules.user}
-            data-cy="user_input"
-          />
-
           <LabelInput
             label='Date'
             name='date'
