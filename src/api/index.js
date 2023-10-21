@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = `http://localhost:9000/api`;
+const baseUrl = import.meta.env.VITE_API_URL;
 
 export const getAll = async (url) => {
   const {
