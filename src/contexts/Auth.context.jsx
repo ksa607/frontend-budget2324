@@ -16,11 +16,15 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
+  const [ready, setReady] = useState(false);
+  const [isAuthed, setIsAuthed] = useState(false);
   const [token, setToken] = useState(localStorage.getItem(JWT_TOKEN_KEY));
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     api.setAuthToken(token);
+    setIsAuthed(Boolean(token));
+    setReady(true);
   }, [token]);
 
   const {
@@ -65,11 +69,13 @@ export const AuthProvider = ({ children }) => {
       token,
       user,
       error,
+      ready,
       loading,
+      isAuthed,
       login,
       logout,
     }),
-    [token, user, error, loading, login, logout]
+    [token, user, error, ready, loading, isAuthed, login, logout]
   );
 
   return (

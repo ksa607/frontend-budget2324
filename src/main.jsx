@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { Navigate, createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NotFound from './components/NotFound';
 import Layout from './components/Layout';
+import PrivateRoute from './components/PrivateRoute';
 import TransactionList from './pages/transactions/TransactionList';
 import AddOrEditTransaction from './pages/transactions/AddOrEditTransaction';
 import PlacesList from './pages/places/PlacesList';
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/transactions',
+        element: <PrivateRoute />,
         children: [
           {
             index: true,
@@ -42,6 +44,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/places',
+        element: <PrivateRoute />,
         children: [
           {
             index: true,
