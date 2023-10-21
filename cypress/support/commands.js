@@ -34,3 +34,12 @@ Cypress.Commands.add('login', (email, password) => {
   cy.get('[data-cy=password_input]').clear().type(password);
   cy.get('[data-cy=submit_btn]').click();
 });
+
+Cypress.Commands.add('logout', () => {
+  Cypress.log({
+    displayName: 'logout',
+  });
+
+  cy.visit('http://localhost:5173');
+  cy.get('[data-cy=logout_btn]').click();
+});

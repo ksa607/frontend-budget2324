@@ -31,7 +31,7 @@ export default function Navbar() {
                   <Link className="nav-link" to="/login">Login</Link>
                 </div>
                 <div className="nav-item my-2 mx-sm-3 my-sm-0">
-                  <Link className="nav-link" to="/register">Register</Link>
+                  <Link className="nav-link" to="/register" data-cy='logout_btn'>Register</Link>
                 </div>
               </>
             )
