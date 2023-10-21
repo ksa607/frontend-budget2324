@@ -60,6 +60,7 @@ export default function Login() {
             type='text'
             name='email'
             placeholder='your@email.com'
+            data-cy='email_input'
             validationRules={validationRules.email}
           />
 
@@ -67,6 +68,7 @@ export default function Login() {
             label='password'
             type='password'
             name='password'
+            data-cy='password_input'
             validationRules={validationRules.password}
           />
 
@@ -74,6 +76,7 @@ export default function Login() {
             <div className='btn-group float-end'>
               <button
                 type='submit'
+                data-cy='submit_btn'
                 className='btn btn-primary'
                 disabled={loading}
               >
