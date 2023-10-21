@@ -7,6 +7,7 @@ import TransactionList from './pages/transactions/TransactionList';
 import AddOrEditTransaction from './pages/transactions/AddOrEditTransaction';
 import PlacesList from './pages/places/PlacesList';
 import { ThemeProvider } from './contexts/Theme.context';
+import { AuthProvider } from './contexts/Auth.context';
 import './index.css';
 
 const router = createBrowserRouter([
@@ -54,8 +55,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ThemeProvider>
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
