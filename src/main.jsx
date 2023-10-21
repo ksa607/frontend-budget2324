@@ -9,6 +9,7 @@ import AddOrEditTransaction from './pages/transactions/AddOrEditTransaction';
 import PlacesList from './pages/places/PlacesList';
 import Login from './pages/Login';
 import Logout from './pages/Logout';
+import Register from './pages/Register';
 import { ThemeProvider } from './contexts/Theme.context';
 import { AuthProvider } from './contexts/Auth.context';
 import './index.css';
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: '/logout',
         element: <Logout />,
+      },
+      {
+        path: '/register',
+        element: <Register />,
       },
       {
         path: '/transactions',
