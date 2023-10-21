@@ -1,6 +1,18 @@
-import axios from 'axios';
+import axiosRoot from 'axios';
 
 const baseUrl = `http://localhost:9000/api`;
+
+export const axios = axiosRoot.create({
+  baseURL: baseUrl,
+});
+
+export const setAuthToken = (token) => {
+  if (token) {
+    axios.defaults.headers['Authorization'] = `Bearer ${token}`;
+  } else {
+    delete axios.defaults.headers['Authorization'];
+  }
+};
 
 export const getAll = async (url) => {
   const {

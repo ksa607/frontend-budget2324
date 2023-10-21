@@ -2,6 +2,7 @@ import {
   createContext,
   useState,
   useCallback,
+  useEffect,
   useMemo,
   useContext,
 } from 'react';
@@ -17,6 +18,10 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem(JWT_TOKEN_KEY));
   const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    api.setAuthToken(token);
+  }, [token]);
 
   const {
     isMutating: loading,
