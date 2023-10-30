@@ -3,10 +3,10 @@ import { useThemeColors } from '../contexts/Theme.context';
 import Navbar from './Navbar';
 
 export default function Layout() {
-  const { theme, textTheme } = useThemeColors();
+  const { theme, oppositeTheme } = useThemeColors();
 
   return (
-		<div className={`container-xl bg-${theme} text-${textTheme}`}>
+		<div className={`container-xl bg-${theme} text-${oppositeTheme}`}>
       <Navbar />
       <Outlet />
     </div>
