@@ -20,7 +20,7 @@ export default function TransactionList() {
       transactions.filter((t) => {
         return t.place.name.toLowerCase().includes(search.toLowerCase());
       }),
-    [search, transactions]
+    [search, transactions],
   );
 
   return (

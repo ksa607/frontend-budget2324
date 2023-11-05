@@ -59,8 +59,8 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <PlacesList />,
-          }
-        ]
+          },
+        ],
       },
       {
         path: '*',
@@ -78,5 +78,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <RouterProvider router={router} />
       </ThemeProvider>
     </AuthProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

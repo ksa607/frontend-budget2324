@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
         return false;
       }
     },
-    [doLogin, setSession]
+    [doLogin, setSession],
   );
 
   const register = useCallback(
@@ -80,7 +80,7 @@ export const AuthProvider = ({ children }) => {
         return false;
       }
     },
-    [doRegister, setSession]
+    [doRegister, setSession],
   );
 
   const logout = useCallback(() => {
@@ -103,7 +103,7 @@ export const AuthProvider = ({ children }) => {
       logout,
       register,
     }),
-    [token, user, loginError, registerError, ready, loginLoading, registerLoading, isAuthed, login, logout, register]
+    [token, user, loginError, registerError, ready, loginLoading, registerLoading, isAuthed, login, logout, register],
   );
 
   return (

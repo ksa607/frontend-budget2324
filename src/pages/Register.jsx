@@ -29,7 +29,7 @@ export default function Register() {
         });
       }// 👈 3
     },
-    [register, navigate]
+    [register, navigate],
   );
 
   const validationRules = useMemo(() => ({
@@ -49,7 +49,7 @@ export default function Register() {
         return password === value || 'Passwords do not match';
       },
     },
-  }), []);
+  }), [getValues]);
 
   return (
     <FormProvider {...methods}>

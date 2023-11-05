@@ -41,7 +41,7 @@ export default function Login() {
         });
       }// 👈 3
     },
-    [login, navigate]
+    [login, navigate],
   );
 
   return (

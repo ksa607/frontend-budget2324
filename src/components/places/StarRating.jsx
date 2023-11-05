@@ -7,7 +7,7 @@ const Star = ({ index, selected = false, onSelect = (f) => f }) => {
     () => {
       onSelect(index + 1);
     },
-    [index, onSelect]
+    [index, onSelect],
   );
 
   return (
