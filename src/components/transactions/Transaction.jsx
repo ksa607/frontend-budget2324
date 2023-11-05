@@ -16,7 +16,7 @@ const amountFormat = new Intl.NumberFormat('nl-BE', {
   minimumFractionDigits: 2,
 });
 
-export default memo(function Transaction({ id, user, date, amount, place, onDelete }) {
+const TransactionMemoized = memo(function Transaction({ id, user, date, amount, place, onDelete }) {
   const handleDelete = useCallback(() => {
     onDelete(id);
   }, [id, onDelete]);
@@ -42,3 +42,5 @@ export default memo(function Transaction({ id, user, date, amount, place, onDele
     </tr>
   );
 });
+
+export default TransactionMemoized;

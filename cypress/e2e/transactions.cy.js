@@ -4,7 +4,7 @@ describe("Transactions list", () => {
     cy.intercept(
       "GET",
       "http://localhost:9000/api/transactions",
-      { fixture: 'transactions.json' }
+      { fixture: 'transactions.json' },
     );
 
     cy.visit("http://localhost:5173");
@@ -20,7 +20,7 @@ describe("Transactions list", () => {
         req.on("response", (res) => {
           res.setDelay(1000);
         });
-      }
+      },
     ).as("slowResponse");
     cy.visit("http://localhost:5173");
     cy.get("[data-cy=loader]").should("be.visible");

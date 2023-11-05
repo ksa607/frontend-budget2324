@@ -38,7 +38,7 @@ function LabelInput({ label, name, type, validationRules, ...rest }) {
   const {
     register,
     errors,
-    isSubmitting
+    isSubmitting,
   } = useFormContext();
 
   const hasError = name in errors;
@@ -67,7 +67,7 @@ function PlacesSelect({ name, places, ...rest }) {
   const {
     register,
     errors,
-    isSubmitting
+    isSubmitting,
   } = useFormContext();
 
   const hasError = name in errors;
@@ -123,7 +123,7 @@ export default function TransactionForm({
       id: transaction?.id,
     });
     navigate('/transactions');
-  }, [reset, saveTransaction, navigate]);
+  }, [saveTransaction, navigate, transaction?.id]);
 
   useEffect(() => {
     if (

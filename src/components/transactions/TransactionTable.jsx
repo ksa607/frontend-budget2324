@@ -3,7 +3,7 @@ import { useThemeColors } from '../../contexts/Theme.context';
 
 export default function TransactionTable({
   transactions,
-  onDelete
+  onDelete,
 }) {
   const { theme } = useThemeColors();
   if (transactions.length === 0) {

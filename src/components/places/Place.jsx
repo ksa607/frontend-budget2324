@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react';
 import { useThemeColors } from '../../contexts/Theme.context';
 import StarRating from './StarRating';
 
-const Place = ({ id, name, rating, onRate, onDelete }) => {
+const PlaceMemoized = memo(function Place({ id, name, rating, onRate, onDelete }) {
   const { theme, oppositeTheme } = useThemeColors();
   const handleRate = (newRating) => {
     onRate(id, newRating);
@@ -23,6 +23,6 @@ const Place = ({ id, name, rating, onRate, onDelete }) => {
       </div>
     </div>
   );
-};
+});
 
-export default memo(Place);
+export default PlaceMemoized;

@@ -4,7 +4,7 @@ const baseUrl = import.meta.env.VITE_API_URL;
 
 export const getAll = async (url) => {
   const {
-    data
+    data,
   } = await axios.get(`${baseUrl}/${url}`); 
 
   return data.items;

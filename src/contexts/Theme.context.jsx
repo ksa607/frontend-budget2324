@@ -22,7 +22,7 @@ export const useThemeColors = () => {
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(
-    sessionStorage.getItem('themeMode') || themes.dark
+    sessionStorage.getItem('themeMode') || themes.dark,
   );
 
   const toggleTheme = useCallback(() => {
@@ -33,12 +33,12 @@ export const ThemeProvider = ({ children }) => {
 
   const oppositeTheme = useMemo(
     () => (theme === themes.dark ? themes.light : themes.dark),
-    [theme]
+    [theme],
   );
 
   const value = useMemo(
     () => ({ theme, oppositeTheme, toggleTheme }),
-    [theme, oppositeTheme, toggleTheme]
+    [theme, oppositeTheme, toggleTheme],
   );
 
   return (
