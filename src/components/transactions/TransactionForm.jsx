@@ -58,7 +58,7 @@ function PlacesSelect({ name, places, ...rest }) {
         ))}
       </select>
       {hasError ? (
-        <div className='form-text text-danger' data-cy="places_select_error">{errors[name]}</div>
+        <div className='form-text text-danger' data-cy="places_select_error">{errors[name].message}</div>
       ) : null}
     </div>
   );
