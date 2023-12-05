@@ -84,13 +84,18 @@ export default function TransactionForm({
 
   const onSubmit = useCallback(async (data) => {
     const { place, amount, date } = data;
-    await saveTransaction({
-      placeId: place,
-      amount: parseInt(amount),
-      date,
-      id: transaction?.id,
-    });
-    navigate('/transactions');
+    try {
+      await saveTransaction({
+        placeId: place,
+        amount: parseInt(amount),
+        date,
+        id: transaction?.id,
+      });
+      navigate('/transactions');
+    }
+    catch (error) {
+      console.log(error);
+    }
   }, [saveTransaction, navigate, transaction?.id]);
 
   useEffect(() => {
@@ -98,7 +103,7 @@ export default function TransactionForm({
       // check on non-empty object
       transaction &&
       (Object.keys(transaction).length !== 0 ||
-          transaction.constructor !== Object)
+        transaction.constructor !== Object)
     ) {
       const dateAsString = toDateInputString(new Date(transaction.date));
       setValue("date", dateAsString);
@@ -111,7 +116,6 @@ export default function TransactionForm({
 
   return (
     <>
-      <h2>Add transaction</h2>
       <Error error={saveError} />
 
       <FormProvider {...methods}>
