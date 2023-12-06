@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useMemo } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FormProvider, useForm } from 'react-hook-form';
 import LabelInput from '../components/LabelInput';
 import { useAuth } from '../contexts/Auth.context';
@@ -17,6 +17,14 @@ const validationRules = {
 export default function Login() {
   const { error, loading, login } = useAuth();
   const navigate = useNavigate();
+  const { search } = useLocation();
+
+  const redirect = useMemo(() => {
+    const urlParams = new URLSearchParams(search);
+    if (urlParams.has("redirect"))
+      return urlParams.get("redirect");
+    return "/";
+  }, [search]);
 
   const methods = useForm({
     defaultValues: {
@@ -36,12 +44,12 @@ export default function Login() {
 
       if (loggedIn) {
         navigate({
-          pathname: '/',
+          pathname: redirect,
           replace: true,
         });
-      }// 👈 3
+      }
     },
-    [login, navigate],
+    [login, navigate, redirect],
   );
 
   return (
