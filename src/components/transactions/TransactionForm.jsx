@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import { save } from '../../api';
 import Error from '../Error';
+import LabelInput from '../LabelInput';
 
 const toDateInputString = (date) => {
   // ISO String without the trailing 'Z' is fine 🙄
@@ -20,10 +21,6 @@ const toDateInputString = (date) => {
 };
 
 const validationRules = {
-  user: {
-    required: 'User is required',
-    min: { value: 1, message: 'min 1' },
-  },
   date: { required: 'Date is required' },
   place: { required: 'Place is required' },
   amount: {
@@ -34,40 +31,13 @@ const validationRules = {
   },
 };
 
-function LabelInput({ label, name, type, validationRules, ...rest }) {
-  const {
-    register,
-    errors,
-    isSubmitting,
-  } = useFormContext();
-
-  const hasError = name in errors;
-
-  return (
-    <div className='mb-3'>
-      <label htmlFor={name} className='form-label'>
-        {label}
-      </label>
-      <input
-        {...register(name, validationRules)}
-        id={name}
-        type={type}
-        disabled={isSubmitting}
-        className='form-control'
-        {...rest}
-      />
-      {hasError ? (
-        <div className='form-text text-danger' data-cy="label_input_error">{errors[name].message}</div>
-      ) : null}
-    </div>
-  );
-}
-
 function PlacesSelect({ name, places, ...rest }) {
   const {
     register,
-    errors,
-    isSubmitting,
+    formState: {
+      errors,
+      isSubmitting,
+    },
   } = useFormContext();
 
   const hasError = name in errors;
@@ -88,7 +58,7 @@ function PlacesSelect({ name, places, ...rest }) {
         ))}
       </select>
       {hasError ? (
-        <div className='form-text text-danger' data-cy="places_select_error">{errors[name]}</div>
+        <div className='form-text text-danger' data-cy="places_select_error">{errors[name].message}</div>
       ) : null}
     </div>
   );
@@ -104,25 +74,28 @@ export default function TransactionForm({
     error: saveError,
   } = useSWRMutation('transactions', save);
 
+  const methods = useForm();
   const {
-    register,
     handleSubmit,
     reset,
     setValue,
-    formState: { errors },
     isSubmitting,
-  } = useForm();
+  } = methods;
 
   const onSubmit = useCallback(async (data) => {
-    const { user, place, amount, date } = data;
-    await saveTransaction({
-      userId: user,
-      placeId: place,
-      amount: parseInt(amount),
-      date,
-      id: transaction?.id,
-    });
-    navigate('/transactions');
+    const { place, amount, date } = data;
+    try {
+      await saveTransaction({
+        placeId: place,
+        amount: parseInt(amount),
+        date,
+        id: transaction?.id,
+      });
+      navigate('/transactions');
+    }
+    catch (error) {
+      console.log(error);
+    }
   }, [saveTransaction, navigate, transaction?.id]);
 
   useEffect(() => {
@@ -130,11 +103,10 @@ export default function TransactionForm({
       // check on non-empty object
       transaction &&
       (Object.keys(transaction).length !== 0 ||
-          transaction.constructor !== Object)
+        transaction.constructor !== Object)
     ) {
       const dateAsString = toDateInputString(new Date(transaction.date));
       setValue("date", dateAsString);
-      setValue("user", transaction.user.id);
       setValue("place", transaction.place.id);
       setValue("amount", transaction.amount);
     } else {
@@ -144,24 +116,10 @@ export default function TransactionForm({
 
   return (
     <>
-      <h2>Add transaction</h2>
       <Error error={saveError} />
 
-      <FormProvider
-        handleSubmit={handleSubmit}
-        errors={errors}
-        register={register}
-        isSubmitting={isSubmitting}
-      >
+      <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)} className='mb-5'>
-          <LabelInput
-            label='User ID'
-            name='user'
-            type='number'
-            validationRules={validationRules.user}
-            data-cy="user_input"
-          />
-
           <LabelInput
             label='Date'
             name='date'

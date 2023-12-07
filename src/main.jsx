@@ -3,10 +3,15 @@ import ReactDOM from 'react-dom/client';
 import { Navigate, createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NotFound from './components/NotFound';
 import Layout from './components/Layout';
+import PrivateRoute from './components/PrivateRoute';
 import TransactionList from './pages/transactions/TransactionList';
 import AddOrEditTransaction from './pages/transactions/AddOrEditTransaction';
 import PlacesList from './pages/places/PlacesList';
+import Login from './pages/Login';
+import Logout from './pages/Logout';
+import Register from './pages/Register';
 import { ThemeProvider } from './contexts/Theme.context';
+import { AuthProvider } from './contexts/Auth.context';
 import './index.css';
 
 const router = createBrowserRouter([
@@ -18,7 +23,20 @@ const router = createBrowserRouter([
         element: <Navigate replace to="/transactions" />,
       },
       {
+        path: '/login',
+        element: <Login />,
+      },
+      {
+        path: '/logout',
+        element: <Logout />,
+      },
+      {
+        path: '/register',
+        element: <Register />,
+      },
+      {
         path: '/transactions',
+        element: <PrivateRoute />,
         children: [
           {
             index: true,
@@ -36,6 +54,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/places',
+        element: <PrivateRoute />,
         children: [
           {
             index: true,
@@ -43,19 +62,21 @@ const router = createBrowserRouter([
           },
         ],
       },
-      {
-        path: '*',
-        element: <NotFound />,
-      },
     ],
+  },
+  {
+    path: '*',
+    element: <NotFound />,
   },
 ]);
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ThemeProvider>
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </AuthProvider>
   </React.StrictMode>,
 );

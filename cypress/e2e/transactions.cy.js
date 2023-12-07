@@ -1,5 +1,9 @@
 describe("Transactions list", () => {
 
+  beforeEach(() => {
+    cy.login('thomas.aelbrecht@hogent.be', '12345678');
+  });
+
   it("should show the transactions", () => {
     cy.intercept(
       "GET",
@@ -14,7 +18,7 @@ describe("Transactions list", () => {
   });
 
   it("should show a loading indicator for a very slow response", () => {
-  cy.intercept(
+    cy.intercept(
       "http://localhost:9000/api/transactions",
       (req) => {
         req.on("response", (res) => {
@@ -34,7 +38,7 @@ describe("Transactions list", () => {
     cy.get('[data-cy=transactions_search_input]').type('Ir');
     cy.get('[data-cy=transactions_search_btn]').click();
 
-    cy.get("[data-cy=transaction]").should("have.length", 3);
+    cy.get("[data-cy=transaction]").should("have.length", 1);
     cy.get("[data-cy=transaction_place]").eq(0).contains(/Irish Pub/);
   });
 

@@ -1,6 +1,18 @@
-import axios from 'axios';
+import axiosRoot from 'axios';
 
 const baseUrl = import.meta.env.VITE_API_URL;
+
+export const axios = axiosRoot.create({
+  baseURL: baseUrl,
+});
+
+export const setAuthToken = (token) => {
+  if (token) {
+    axios.defaults.headers['Authorization'] = `Bearer ${token}`;
+  } else {
+    delete axios.defaults.headers['Authorization'];
+  }
+};
 
 export const getAll = async (url) => {
   const {
@@ -12,6 +24,14 @@ export const getAll = async (url) => {
 
 export const deleteById = async (url, { arg: id }) => {
   await axios.delete(`${baseUrl}/${url}/${id}`);
+};
+
+export const post = async (url, { arg }) => {
+  const {
+    data,
+  } = await axios.post(url, arg);
+
+  return data;
 };
 
 export const save = async (url, { arg: body }) => {
